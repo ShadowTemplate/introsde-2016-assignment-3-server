@@ -16,12 +16,7 @@ public class PeoplePublisher {
         if (String.valueOf(System.getenv("PORT")) != "null"){
             PORT=String.valueOf(System.getenv("PORT"));
         }
-        String hostname = InetAddress.getLocalHost().getHostAddress();
-        if (hostname.equals("127.0.0.1"))
-        {
-            hostname = "localhost";
-        }
-
+        
         String endpointUrl = SERVER_URL+":"+PORT+BASE_URL;
         System.out.println("Starting People Service...");
         System.out.println("--> Published. Check out "+endpointUrl+"?wsdl");
