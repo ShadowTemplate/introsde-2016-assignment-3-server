@@ -9,6 +9,9 @@ public class PeoplePublisher {
     public static String BASE_URL = "/ws/people";
 
     public static String getEndpointURL() {
+	if (String.valueOf(System.getenv("PORT")) != "null"){
+            PORT=String.valueOf(System.getenv("PORT"));
+        }
         return SERVER_URL+":"+PORT+BASE_URL;
     }
 
