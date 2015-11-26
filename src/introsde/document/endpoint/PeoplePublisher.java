@@ -1,22 +1,28 @@
 package introsde.document.endpoint;
 import introsde.document.ws.PeopleImpl;
+import java.net.InetAddress;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.io.IOException;
 
 import javax.xml.ws.Endpoint;
 
 public class PeoplePublisher {
-    public String SERVER_URL = "http://localhost";
-    public String PORT = "6902";
-    public String BASE_URL = "/ws/people";
+    public static void main(String[] args) throws IllegalArgumentException, IOException, URISyntaxException{
+        String SERVER_URL = "http://localhost";
+        String PORT = "6902";
+        String BASE_URL = "/ws/people";
 
-    public String getEndpointURL() {
-	    if (String.valueOf(System.getenv("PORT")) != "null"){
-            PORT = String.valueOf(System.getenv("PORT"));
+        if (String.valueOf(System.getenv("PORT")) != "null"){
+            PORT=String.valueOf(System.getenv("PORT"));
         }
-        return SERVER_URL+":"+PORT+BASE_URL;
-    }
+        String hostname = InetAddress.getLocalHost().getHostAddress();
+        if (hostname.equals("127.0.0.1"))
+        {
+            hostname = "localhost";
+        }
 
-    public void main(String[] args) {
-        String endpointUrl = getEndpointURL();
+        String endpointUrl = SERVER_URL+":"+PORT+BASE_URL;
         System.out.println("Starting People Service...");
         System.out.println("--> Published. Check out "+endpointUrl+"?wsdl");
         Endpoint.publish(endpointUrl, new PeopleImpl());
