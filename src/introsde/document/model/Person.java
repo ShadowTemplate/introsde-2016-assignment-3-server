@@ -1,123 +1,143 @@
 package introsde.document.model;
 
 import introsde.document.dao.LifeCoachDao;
+import introsde.document.model.LifeStatus;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.text.ParseException;
-import java.util.Locale;
-
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-@Entity  // indicates that this class is an entity to persist in DB
-@Table(name="Person") // to whole table must be persisted 
+import javax.xml.bind.annotation.XmlType;
+
+import java.util.Date;
+import java.util.List;
+
+
+/**
+ * The persistent class for the "Person" database table.
+ * 
+ */
+@Entity
+@Table(name="Person")
 @NamedQuery(name="Person.findAll", query="SELECT p FROM Person p")
-@XmlRootElement
 public class Person implements Serializable {
     private static final long serialVersionUID = 1L;
-    @Id // defines this attributed as the one that identifies the entity
+
+    @Id
+    // For sqlite in particular, you need to use the following @GeneratedValue annotation
+    // This holds also for the other tables
+    // SQLITE implements auto increment ids through named sequences that are stored in a 
+    // special table named "sqlite_sequence"
     @GeneratedValue(generator="sqlite_person")
     @TableGenerator(name="sqlite_person", table="sqlite_sequence",
         pkColumnName="name", valueColumnName="seq",
         pkColumnValue="Person")
     @Column(name="idPerson")
     private int idPerson;
+
     @Column(name="lastname")
     private String lastname;
+
     @Column(name="name")
     private String name;
+
     @Column(name="username")
     private String username;
-    @Temporal(TemporalType.DATE) // defines the precision of the date attribute
+    
+    @Temporal(TemporalType.DATE)
     @Column(name="birthdate")
-    private Date birthdate; 
+    private Date birthdate;
+    
     @Column(name="email")
     private String email;
-    
+
     // mappedBy must be equal to the name of the attribute in LifeStatus that maps this relation
     @OneToMany(mappedBy="person",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
     private List<LifeStatus> lifeStatus;
     
+    public Person() {
+    }
+    
+    public Date getBirthdate() {
+        return this.birthdate;
+    }
+
+    
+    public void setBirthdate(Date birthdate) {
+        this.birthdate = birthdate;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public int person() {
+        return this.idPerson;
+    }
+
+    public void setIdPerson(int idPerson) {
+        this.idPerson = idPerson;
+    }
+
+    public String getLastname() {
+        return this.lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getUsername() {
+        return this.username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    // the XmlElementWrapper defines the name of node in which the list of LifeStatus elements
+    // will be inserted
     @XmlElementWrapper(name = "Measurements")
     public List<LifeStatus> getLifeStatus() {
         return lifeStatus;
     }
+
     public void setLifeStatus(List<LifeStatus> param) {
         this.lifeStatus = param;
     }
-    // add below all the getters and setters of all the private attributes
     
-    // getters
-    public int getIdPerson(){
-        return idPerson;
-    }
-
-    public String getLastname(){
-        return lastname;
-    }
-    public String getName(){
-        return name;
-    }
-    public String getUsername(){
-        return username;
-    }
-    public Date getBirthdate(){
-        //DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        // Get the date today using Calendar object.
-        //return df.format(birthdate);
-        return birthdate;
-    }
-    public String getEmail(){
-        return email;
-    }
-    
-    // setters
-    public void setIdPerson(int idPerson){
-        this.idPerson = idPerson;
-    }
-    public void setLastname(String lastname){
-        this.lastname = lastname;
-    }
-    public void setName(String name){
-        this.name = name;
-    }
-    public void setUsername(String username){
-        this.username = username;
-    }
-    public void setBirthdate(Date bd){
-        //throws ParseException
-        //DateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
-        //Date date = format.parse(bd);
-        //this.birthdate = date;
-        this.birthdate = bd;
-    }
-    public void setEmail(String email){
-        this.email = email;
-    }
-    
-    public static Person getPersonById(int personId) {
+    // Database operations
+    // Notice that, for this example, we create and destroy and entityManager on each operation. 
+    // How would you change the DAO to not having to create the entity manager every time? 
+    public static Person getPersonById(int idPerson) {
         EntityManager em = LifeCoachDao.instance.createEntityManager();
-        Person p = em.find(Person.class, personId);
+        Person p = em.find(Person.class, idPerson);
         LifeCoachDao.instance.closeConnections(em);
         return p;
     }
-
+    
     public static List<Person> getAll() {
         EntityManager em = LifeCoachDao.instance.createEntityManager();
-        List<Person> list = em.createNamedQuery("Person.findAll", Person.class)
-            .getResultList();
+        List<Person> list = em.createNamedQuery("Person.findAll", Person.class).getResultList();
         LifeCoachDao.instance.closeConnections(em);
         return list;
     }
-
+    
     public static Person savePerson(Person p) {
         EntityManager em = LifeCoachDao.instance.createEntityManager();
         EntityTransaction tx = em.getTransaction();
@@ -126,10 +146,10 @@ public class Person implements Serializable {
         tx.commit();
         LifeCoachDao.instance.closeConnections(em);
         return p;
-    } 
-
+    }
+    
     public static Person updatePerson(Person p) {
-        EntityManager em = LifeCoachDao.instance.createEntityManager(); 
+        EntityManager em = LifeCoachDao.instance.createEntityManager();
         EntityTransaction tx = em.getTransaction();
         tx.begin();
         p=em.merge(p);
@@ -137,7 +157,7 @@ public class Person implements Serializable {
         LifeCoachDao.instance.closeConnections(em);
         return p;
     }
-
+    
     public static void removePerson(Person p) {
         EntityManager em = LifeCoachDao.instance.createEntityManager();
         EntityTransaction tx = em.getTransaction();
@@ -147,5 +167,8 @@ public class Person implements Serializable {
         tx.commit();
         LifeCoachDao.instance.closeConnections(em);
     }
-    
+
+    public int getIdPerson() {
+        return idPerson;
+    }
 }

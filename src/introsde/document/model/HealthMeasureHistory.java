@@ -31,7 +31,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name="HealthMeasureHistory")
 @NamedQuery(name="HealthMeasureHistory.findAll", query="SELECT h FROM HealthMeasureHistory h")
-@XmlRootElement
 public class HealthMeasureHistory implements Serializable {
 	private static final long serialVersionUID = 1L;
 

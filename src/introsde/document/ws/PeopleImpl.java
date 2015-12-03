@@ -1,4 +1,5 @@
 package introsde.document.ws;
+
 import introsde.document.model.LifeStatus;
 import introsde.document.model.Person;
 
