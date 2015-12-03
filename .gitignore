@@ -1,5 +1,6 @@
 /build
 /ivy
+/WebContent/WEB-INF/lib/
 .gitigore
 .DS_Store
 *.DS_Store
