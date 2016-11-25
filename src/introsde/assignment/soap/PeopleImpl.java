@@ -1,5 +1,6 @@
 package introsde.assignment.soap;
 
+import introsde.assignment.model.Measure;
 import introsde.assignment.model.Person;
 
 import javax.jws.WebService;
@@ -10,7 +11,7 @@ import java.util.List;
 public class PeopleImpl implements People {
     @Override
     public Person readPerson(int id) {
-        return new Person(1L, "Gianvito", "Taneburgo", new ArrayList<>(), new ArrayList<>());
+        return new Person(1L, "Gianvito", "Taneburgo", new ArrayList<Measure>(), new ArrayList<Measure>());
     }
 
     @Override
