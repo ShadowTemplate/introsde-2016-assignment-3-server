@@ -16,4 +16,8 @@ public class Person {
         this.currentHealth = currentHealth;
         this.healthHistory = healthHistory;
     }
+
+    public Person() {
+
+    }
 }

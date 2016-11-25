@@ -17,4 +17,8 @@ public class Measure {
         this.measureValue = measureValue;
         this.measureValueType = measureValueType;
     }
+
+    public Measure() {
+        
+    }
 }
