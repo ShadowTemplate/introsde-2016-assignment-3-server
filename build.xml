@@ -65,7 +65,7 @@
         </copy>
     </target>
 
-    <target name="start" depends="install">
+    <target name="start">
         <java classname="introsde.assignment.util.Publisher" classpath="${build.dir}" fork="true">
             <arg value="$JAVA_OPTS  -cp"/>
             <classpath>
