@@ -24,7 +24,7 @@ public class Publisher {
         }
 
         String endpointUrl = PROTOCOL + HOSTNAME + ":" + PORT + BASE_URL;
-        System.out.println("Starting People Service...");
+        System.out.println("Starting MY People Service...");
         System.out.println("--> Published. Check out " + endpointUrl + "?wsdl");
         Endpoint.publish(endpointUrl, new PeopleImpl());
     }
