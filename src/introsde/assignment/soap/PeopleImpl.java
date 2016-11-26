@@ -1,36 +1,66 @@
 package introsde.assignment.soap;
 
+import introsde.assignment.dao.EntityDAO;
 import introsde.assignment.model.Measure;
 import introsde.assignment.model.Person;
 
 import javax.jws.WebService;
-import java.util.ArrayList;
 import java.util.List;
 
-@WebService(endpointInterface = "introsde.assignment.soap.People")
+@WebService(endpointInterface = "introsde.assignment.soap.People", serviceName="PeopleService")
 public class PeopleImpl implements People {
+
     @Override
-    public Person readPerson(int id) {
-        return new Person(1L, "Gianvito", "Taneburgo", new ArrayList<Measure>(), new ArrayList<Measure>());
+    public List<Person> readPersonList() {
+        return EntityDAO.listPeople();
     }
 
     @Override
-    public List<Person> getPeople() {
-        return new ArrayList<>();
+    public Person readPerson(Long personId) {
+        return EntityDAO.getPerson(personId);
     }
 
     @Override
-    public int addPerson(Person person) {
-        return 0;
+    public Person updatePerson(Person person) {
+        EntityDAO.updatePerson(person.getId(), person);
+        return EntityDAO.getPerson(person.getId());
     }
 
     @Override
-    public int updatePerson(Person person) {
-        return 42;
+    public Person createPerson(Person person) {
+        person.setId(null);
+        return EntityDAO.putPerson(person);
     }
 
     @Override
-    public int deletePerson(int id) {
-        return -1;
+    public void deletePerson(Long personId) {
+        Person person = EntityDAO.getPerson(personId);
+        EntityDAO.deletePerson(person);
+    }
+
+    @Override
+    public List<Measure> readPersonHistory(Long personId, String measureType) {
+        Person person = EntityDAO.getPerson(personId);
+        return person.getHealthHistory();
+    }
+
+    @Override
+    public List<String> readMeasureTypes() {
+        return EntityDAO.listMeasure();
+    }
+
+    @Override
+    public Measure readPersonMeasure(Long id, String measureType, Long mid) {
+        return null;
+    }
+
+    @Override
+    public void savePersonMeasure(Long personId, Measure measure) {
+        EntityDAO.addMeasure(personId, measure);
+    }
+
+    @Override
+    public Measure updatePersonMeasure(Long measureId, Measure measure) {
+        return null;
     }
 }

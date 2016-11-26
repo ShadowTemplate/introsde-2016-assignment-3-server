@@ -1,25 +1,46 @@
 package introsde.assignment.model;
 
 
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
-public class Measure {
+@Entity
+@Table(name="Measure")
+public class Measure implements Serializable {
+
+    @Id
+    @TableGenerator(name="MEASURE_ID_GENERATOR", table="MEASURE_SEQUENCES", pkColumnName="MEASURE_SEQ_NAME",
+            valueColumnName="MEASURE_SEQ_NUMBER", pkColumnValue = "MEASURE_SEQUENCE", allocationSize=1)
+    @GeneratedValue(strategy= GenerationType.TABLE, generator="MEASURE_ID_GENERATOR")
     private Long mid;
+
+    @Column(name="dateRegistered")
+    @Temporal(TemporalType.DATE)
     private Date dateRegistered;
+
+    @Column(name="measureType")
     private String measureType;
+
+    @Column(name="measureValue")
     private String measureValue;
+
+    @Column(name="measureValueType")
     private String measureValueType;
 
-    public Measure(Long mid, Date dateRegistered, String measureType, String measureValue, String measureValueType) {
-        this.mid = mid;
+    @ManyToOne
+    @JoinColumn(name="id",referencedColumnName="id")
+    private Person person;
+
+    public Measure() {
+
+    }
+
+    public Measure(Date dateRegistered, String measureType, String measureValue, String measureValueType) {
         this.dateRegistered = dateRegistered;
         this.measureType = measureType;
         this.measureValue = measureValue;
         this.measureValueType = measureValueType;
-    }
-
-    public Measure() {
-        
     }
 
     public Long getMid() {
@@ -60,5 +81,17 @@ public class Measure {
 
     public void setMeasureValueType(String measureValueType) {
         this.measureValueType = measureValueType;
+    }
+
+    @Override
+    public String toString() {
+        return "Measure{" +
+                "mid=" + mid +
+                ", dateRegistered=" + dateRegistered +
+                ", measureType='" + measureType + '\'' +
+                ", measureValue='" + measureValue + '\'' +
+                ", measureValueType='" + measureValueType + '\'' +
+                ", personId='" + person.getId() + '\'' +
+                '}';
     }
 }
