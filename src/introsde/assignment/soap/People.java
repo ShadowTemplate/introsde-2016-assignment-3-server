@@ -1,7 +1,7 @@
 package introsde.assignment.soap;
 
-import introsde.assignment.to.Measure;
-import introsde.assignment.to.Person;
+import introsde.assignment.to.MeasureTO;
+import introsde.assignment.to.PersonTO;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -14,44 +14,33 @@ import java.util.List;
 @SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use= SOAPBinding.Use.LITERAL) //optional
 public interface People {
 
-    @WebMethod(operationName="readPersonList")
-    @WebResult(name="people")
-    List<Person> readPersonList();
+    @WebMethod
+    List<PersonTO> readPersonList();
 
-    @WebMethod(operationName="readPerson")
-    @WebResult(name="person")
-    Person readPerson(@WebParam(name = "personId") Long id);
+    @WebMethod
+    PersonTO readPerson(Long id);
 
-    @WebMethod(operationName="updatePerson")
-    @WebResult(name="person")
-    Person updatePerson(@WebParam(name = "person") Person person);
+    @WebMethod
+    PersonTO updatePerson(PersonTO personTO);
 
-    @WebMethod(operationName="createPerson")
-    @WebResult(name="person")
-    Person createPerson(@WebParam(name = "person") Person person);
+    @WebMethod
+    PersonTO createPerson(PersonTO personTO);
 
-    @WebMethod(operationName="deletePerson")
-    @WebResult(name="person")
-    void deletePerson(@WebParam(name = "personId") Long id);
+    @WebMethod
+    void deletePerson(Long id);
 
-    @WebMethod(operationName="readPersonHistory")
-    @WebResult(name="history")
-    List<Measure> readPersonHistory(@WebParam(name = "personId") Long id, @WebParam(name = "measure") String measureType);
+    @WebMethod
+    List<MeasureTO> readPersonHistory(Long id, String measureType);
 
-    @WebMethod(operationName="readMeasureTypes")
-    @WebResult(name="measures")
+    @WebMethod
     List<String> readMeasureTypes();
 
-    @WebMethod(operationName="readPersonMeasure")
-    @WebResult(name="measure")
-    Measure readPersonMeasure(@WebParam(name = "personId") Long id, @WebParam(name = "measure") String measureType,
-                              @WebParam(name = "measureId") Long mid);
+    @WebMethod
+    MeasureTO readPersonMeasure(Long id, String measureType, Long mid);
 
-    @WebMethod(operationName="savePersonMeasure")
-    @WebResult(name="measure")
-    void savePersonMeasure(@WebParam(name = "personId") Long id, @WebParam(name = "measure") Measure measure);
+    @WebMethod
+    void savePersonMeasure(Long id, MeasureTO measureTO);
 
-    @WebMethod(operationName="updatePersonMeasure")
-    @WebResult(name="measure")
-    Measure updatePersonMeasure(@WebParam(name = "personId") Long id, @WebParam(name = "measure") Measure measure);
+    @WebMethod
+    MeasureTO updatePersonMeasure(Long id, MeasureTO measureTO);
 }

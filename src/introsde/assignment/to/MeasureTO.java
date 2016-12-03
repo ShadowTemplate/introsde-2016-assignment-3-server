@@ -8,7 +8,9 @@ import java.util.Date;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Measure implements Serializable {
+public class MeasureTO implements Serializable {
+
+    private static final long serialVersionUID = 42L;
 
     private Long mid;
     private Date dateRegistered;
@@ -16,11 +18,11 @@ public class Measure implements Serializable {
     private String measureValue;
     private String measureValueType;
 
-    public Measure() {
+    public MeasureTO() {
 
     }
 
-    public Measure(Date dateRegistered, String measureType, String measureValue, String measureValueType) {
+    public MeasureTO(Date dateRegistered, String measureType, String measureValue, String measureValueType) {
         this.dateRegistered = dateRegistered;
         this.measureType = measureType;
         this.measureValue = measureValue;
@@ -69,7 +71,7 @@ public class Measure implements Serializable {
 
     @Override
     public String toString() {
-        return "Measure{" +
+        return "MeasureTO{" +
                 "mid=" + mid +
                 ", dateRegistered=" + dateRegistered +
                 ", measureType='" + measureType + '\'' +

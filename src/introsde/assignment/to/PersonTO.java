@@ -9,19 +9,21 @@ import java.util.List;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Person implements Serializable {
+public class PersonTO implements Serializable {
+
+    private static final long serialVersionUID = 42L;
 
     private Long id;
     private String firstname;
     private String lastname;
-    private List<Measure> currentHealth;
-    private List<Measure> healthHistory;
+    private List<MeasureTO> currentHealth;
+    private List<MeasureTO> healthHistory;
 
-    public Person() {
+    public PersonTO() {
 
     }
 
-    public Person(String firstname, String lastname, List<Measure> currentHealth, List<Measure> healthHistory) {
+    public PersonTO(String firstname, String lastname, List<MeasureTO> currentHealth, List<MeasureTO> healthHistory) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.currentHealth = currentHealth;
@@ -52,25 +54,25 @@ public class Person implements Serializable {
         this.lastname = lastname;
     }
 
-    public List<Measure> getCurrentHealth() {
+    public List<MeasureTO> getCurrentHealth() {
         return currentHealth;
     }
 
-    public void setCurrentHealth(List<Measure> currentHealth) {
+    public void setCurrentHealth(List<MeasureTO> currentHealth) {
         this.currentHealth = currentHealth;
     }
 
-    public List<Measure> getHealthHistory() {
+    public List<MeasureTO> getHealthHistory() {
         return healthHistory;
     }
 
-    public void setHealthHistory(List<Measure> healthHistory) {
+    public void setHealthHistory(List<MeasureTO> healthHistory) {
         this.healthHistory = healthHistory;
     }
 
     @Override
     public String toString() {
-        return "Person{" +
+        return "PersonTO{" +
                 "id=" + id +
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +

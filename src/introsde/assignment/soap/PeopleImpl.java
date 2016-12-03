@@ -1,8 +1,8 @@
 package introsde.assignment.soap;
 
 import introsde.assignment.dao.EntityDAO;
-import introsde.assignment.to.Measure;
-import introsde.assignment.to.Person;
+import introsde.assignment.to.MeasureTO;
+import introsde.assignment.to.PersonTO;
 
 import javax.jws.WebService;
 import java.util.List;
@@ -11,35 +11,35 @@ import java.util.List;
 public class PeopleImpl implements People {
 
     @Override
-    public List<Person> readPersonList() {
+    public List<PersonTO> readPersonList() {
         return EntityDAO.listPeople();
     }
 
     @Override
-    public Person readPerson(Long personId) {
+    public PersonTO readPerson(Long personId) {
         return EntityDAO.getPerson(personId);
     }
 
     @Override
-    public Person updatePerson(Person person) {
-        EntityDAO.updatePerson(person.getId(), person);
-        return EntityDAO.getPerson(person.getId());
+    public PersonTO updatePerson(PersonTO personTO) {
+        EntityDAO.updatePerson(personTO.getId(), personTO);
+        return EntityDAO.getPerson(personTO.getId());
     }
 
     @Override
-    public Person createPerson(Person person) {
-        person.setId(null);
-        return EntityDAO.putPerson(person);
+    public PersonTO createPerson(PersonTO personTO) {
+        personTO.setId(null);
+        return EntityDAO.putPerson(personTO);
     }
 
     @Override
     public void deletePerson(Long personId) {
-        Person person = EntityDAO.getPerson(personId);
-        EntityDAO.deletePerson(person);
+        PersonTO personTO = EntityDAO.getPerson(personId);
+        EntityDAO.deletePerson(personTO);
     }
 
     @Override
-    public List<Measure> readPersonHistory(Long personId, String measureType) {
+    public List<MeasureTO> readPersonHistory(Long personId, String measureType) {
         return EntityDAO.getPerson(personId).getHealthHistory();
     }
 
@@ -49,19 +49,19 @@ public class PeopleImpl implements People {
     }
 
     @Override
-    public Measure readPersonMeasure(Long personId, String measureType, Long measureId) {
-        //List<Measure> currentHealth = Arrays.asList(EntityDAO.getPerson(personId).getCurrentHealth());
+    public MeasureTO readPersonMeasure(Long personId, String measureType, Long measureId) {
+        //List<MeasureTO> currentHealth = Arrays.asList(EntityDAO.getPerson(personId).getCurrentHealth());
         //return currentHealth.parallelStream().filter(m -> m.getMid().equals(measureId)).findFirst().orElseGet(null);
         return null;
     }
 
     @Override
-    public void savePersonMeasure(Long personId, Measure measure) {
-        //EntityDAO.addMeasure(personId, measure);
+    public void savePersonMeasure(Long personId, MeasureTO measureTO) {
+        //EntityDAO.addMeasure(personId, measureTO);
     }
 
     @Override
-    public Measure updatePersonMeasure(Long measureId, Measure measure) {
+    public MeasureTO updatePersonMeasure(Long measureId, MeasureTO measureTO) {
         return null;
     }
 }
