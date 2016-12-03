@@ -1,7 +1,7 @@
 package introsde.assignment.soap;
 
-import introsde.assignment.model.Measure;
-import introsde.assignment.model.Person;
+import introsde.assignment.to.Measure;
+import introsde.assignment.to.Person;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;

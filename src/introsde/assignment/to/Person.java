@@ -1,30 +1,20 @@
-package introsde.assignment.model;
+package introsde.assignment.to;
 
 
-import javax.persistence.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.List;
 
-@Entity
-@Table(name="Person")
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Person implements Serializable {
 
-    @Id
-    @TableGenerator(name="PERSON_ID_GENERATOR", table="PERSON_SEQUENCES", pkColumnName="PERSON_SEQ_NAME",
-            valueColumnName="PERSON_SEQ_NUMBER", pkColumnValue = "PERSON_SEQUENCE", allocationSize=1)
-    @GeneratedValue(strategy=GenerationType.TABLE, generator="PERSON_ID_GENERATOR")
     private Long id;
-
-    @Column(name="firstname")
     private String firstname;
-
-    @Column(name="lastname")
     private String lastname;
-
-    @OneToMany(mappedBy="Person",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
     private List<Measure> currentHealth;
-
-    @OneToMany(mappedBy="Person",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
     private List<Measure> healthHistory;
 
     public Person() {

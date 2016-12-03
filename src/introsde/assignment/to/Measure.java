@@ -1,36 +1,20 @@
-package introsde.assignment.model;
+package introsde.assignment.to;
 
-
-import javax.persistence.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.Date;
 
-@Entity
-@Table(name="Measure")
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Measure implements Serializable {
 
-    @Id
-    @TableGenerator(name="MEASURE_ID_GENERATOR", table="MEASURE_SEQUENCES", pkColumnName="MEASURE_SEQ_NAME",
-            valueColumnName="MEASURE_SEQ_NUMBER", pkColumnValue = "MEASURE_SEQUENCE", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.TABLE, generator="MEASURE_ID_GENERATOR")
     private Long mid;
-
-    @Column(name="dateRegistered")
-    @Temporal(TemporalType.DATE)
     private Date dateRegistered;
-
-    @Column(name="measureType")
     private String measureType;
-
-    @Column(name="measureValue")
     private String measureValue;
-
-    @Column(name="measureValueType")
     private String measureValueType;
-
-    @ManyToOne
-    @JoinColumn(name="id",referencedColumnName="id")
-    private Person person;
 
     public Measure() {
 
@@ -83,14 +67,6 @@ public class Measure implements Serializable {
         this.measureValueType = measureValueType;
     }
 
-    public Person getPerson() {
-        return person;
-    }
-
-    public void setPerson(Person person) {
-        this.person = person;
-    }
-
     @Override
     public String toString() {
         return "Measure{" +
@@ -99,7 +75,6 @@ public class Measure implements Serializable {
                 ", measureType='" + measureType + '\'' +
                 ", measureValue='" + measureValue + '\'' +
                 ", measureValueType='" + measureValueType + '\'' +
-                ", personId='" + person.getId() + '\'' +
                 '}';
     }
 }

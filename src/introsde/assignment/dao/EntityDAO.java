@@ -1,44 +1,42 @@
 package introsde.assignment.dao;
 
-import introsde.assignment.model.Measure;
 import introsde.assignment.model.Person;
 import introsde.assignment.persistence.PersistenceManager;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class EntityDAO {
 
-    public static List<Person> listPeople() {
+    public static List<introsde.assignment.to.Person> listPeople() {
         String query = "SELECT p FROM Person p";
-        return PersistenceManager.instance.listResultQuery(query);
+        List<Person> people = PersistenceManager.instance.listResultQuery(query);
+        return people.stream().map(ObjectConverter::toTO).collect(Collectors.toList());
     }
 
-    public static Person getPerson(Long personId) {
+    public static introsde.assignment.to.Person getPerson(Long personId) {
         String query = "SELECT p FROM Person p WHERE p.id=:arg1";
         Map<String, Object> params = new HashMap<>();
         params.put("arg1", personId);
-        return (Person) PersistenceManager.instance.singleResultQuery(query, params);
+        return ObjectConverter.toTO((Person) PersistenceManager.instance.singleResultQuery(query, params));
     }
 
-    public static Person putPerson(Person person) {
-        PersistenceManager.instance.persist(person);
-        return person;
+    public static introsde.assignment.to.Person putPerson(introsde.assignment.to.Person personTO) {
+        PersistenceManager.instance.persist(ObjectConverter.toModel(personTO));
+        return getPerson(personTO.getId());
     }
 
-    public static void deletePerson(Person person) {
-        PersistenceManager.instance.remove(person);
+    public static void deletePerson(introsde.assignment.to.Person personTO) {
+        PersistenceManager.instance.remove(ObjectConverter.toModel(personTO));
     }
 
-    public static void updatePerson(Long personId, Person oldperson) {
+    public static void updatePerson(Long personId, introsde.assignment.to.Person oldpersonTO) {
         String query = "UPDATE Person p SET p.firstname = :arg1, p.lastname = :arg2 WHERE p.id = :arg3";
         Map<String, Object> params = new HashMap<>();
-        params.put("arg1", oldperson.getFirstname());
-        params.put("arg2", oldperson.getLastname());
+        params.put("arg1", oldpersonTO.getFirstname());
+        params.put("arg2", oldpersonTO.getLastname());
         params.put("arg3", personId);
         PersistenceManager.instance.updateQuery(query, params);
     }
@@ -48,7 +46,10 @@ public class EntityDAO {
         return PersistenceManager.instance.listResultQuery(query);
     }
 
-    public static void addMeasure(Long personId, Measure newMeasure) {
+
+        /*
+
+    public static void addMeasure(Long personId, introsde.assignment.to.Measure newMeasureTO) {
         PersistenceManager.instance.runViaProxy(entityManagerProxy -> {
             String query = "SELECT p FROM Person p WHERE p.id=:arg1";
             Map<String, Object> params = new HashMap<>();
@@ -72,8 +73,6 @@ public class EntityDAO {
             return null;
         });
     }
-
-        /*
 
     public static void updateMeasureType(Double measureId, MeasureType measureTO) {
         String query = "UPDATE MeasureType m SET m.value = :arg1, m.created = :arg2 WHERE m.mid = :arg3";
