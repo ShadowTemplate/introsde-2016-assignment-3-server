@@ -24,22 +24,20 @@ public class ObjectConverter {
         personTO.setId(person.getId());
         personTO.setFirstname(person.getFirstname());
         personTO.setLastname(person.getLastname());
-        //personTO.setCurrentHealth(person.getCurrentHealth().stream().map(ObjectConverter::toTO).toArray(introsde.assignment.to.MeasureTO[]::new));
-        //personTO.setHealthHistory(person.getHealthHistory().stream().map(ObjectConverter::toTO).toArray(introsde.assignment.to.MeasureTO[]::new));
         personTO.setCurrentHealth(person.getCurrentHealth().stream().map(ObjectConverter::toTO).collect(Collectors.toList()));
         personTO.setHealthHistory(person.getHealthHistory().stream().map(ObjectConverter::toTO).collect(Collectors.toList()));
         return personTO;
     }
 
-    public static introsde.assignment.model.Measure toModel(MeasureTO measureTO,
-                                                            introsde.assignment.model.Person person) {
+    public static introsde.assignment.model.Measure toModel(MeasureTO measureTO) {
         introsde.assignment.model.Measure measure = new introsde.assignment.model.Measure();
-        measure.setMid(measureTO.getMid());
+        if (measureTO.getMid() != null) {
+            measure.setMid(measureTO.getMid());
+        }
         measure.setDateRegistered(measureTO.getDateRegistered());
         measure.setMeasureType(measureTO.getMeasureType());
         measure.setMeasureValue(measureTO.getMeasureValue());
         measure.setMeasureValueType(measureTO.getMeasureValueType());
-        //measure.setPerson(person);
         return measure;
     }
 
@@ -48,19 +46,17 @@ public class ObjectConverter {
         person.setId(personTO.getId());
         person.setFirstname(personTO.getFirstname());
         person.setLastname(personTO.getLastname());
-        //person.setCurrentHealth(Arrays.stream(personTO.getCurrentHealth()).map(measure -> toModel(measure, person)).collect(Collectors.toList()));
-        //person.setHealthHistory(Arrays.stream(personTO.getHealthHistory()).map(measure -> toModel(measure, person)).collect(Collectors.toList()));
 
         List<MeasureTO> currentHealth = personTO.getCurrentHealth();
         if(currentHealth != null) {
-            person.setCurrentHealth(currentHealth.stream().map(measure -> toModel(measure, person)).collect(Collectors.toList()));
+            person.setCurrentHealth(currentHealth.stream().map(ObjectConverter::toModel).collect(Collectors.toList()));
         } else {
             person.setCurrentHealth(new ArrayList<>());
         }
 
         List<MeasureTO> healthHistory = personTO.getHealthHistory();
         if (healthHistory != null) {
-            person.setHealthHistory(healthHistory.stream().map(measureTO -> toModel(measureTO, person)).collect(Collectors.toList()));
+            person.setHealthHistory(healthHistory.stream().map(ObjectConverter::toModel).collect(Collectors.toList()));
         } else {
             person.setHealthHistory(new ArrayList<>());
         }

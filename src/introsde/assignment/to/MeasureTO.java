@@ -22,13 +22,6 @@ public class MeasureTO implements Serializable {
 
     }
 
-    public MeasureTO(Date dateRegistered, String measureType, String measureValue, String measureValueType) {
-        this.dateRegistered = dateRegistered;
-        this.measureType = measureType;
-        this.measureValue = measureValue;
-        this.measureValueType = measureValueType;
-    }
-
     public Long getMid() {
         return mid;
     }

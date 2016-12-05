@@ -19,4 +19,7 @@ public class EntityManagerProxy {
         return PersistenceManager.instance.singleResultQuery(entityManager, query, parameters);
     }
 
+    public <T> T merge(T object) {
+        return PersistenceManager.instance.merge(entityManager, object);
+    }
 }

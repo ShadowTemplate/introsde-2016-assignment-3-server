@@ -4,8 +4,6 @@ import introsde.assignment.to.MeasureTO;
 import introsde.assignment.to.PersonTO;
 
 import javax.jws.WebMethod;
-import javax.jws.WebParam;
-import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import java.util.List;
@@ -39,8 +37,11 @@ public interface People {
     MeasureTO readPersonMeasure(Long id, String measureType, Long mid);
 
     @WebMethod
-    void savePersonMeasure(Long id, MeasureTO measureTO);
+    MeasureTO savePersonMeasure(Long id, MeasureTO measureTO);
 
     @WebMethod
     MeasureTO updatePersonMeasure(Long id, MeasureTO measureTO);
+
+    @WebMethod
+    void resetDB(); // Utility
 }

@@ -20,6 +20,11 @@ public enum PersistenceManager {
         entityManagerFactory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
     }
 
+    <T> T merge(EntityManager entityManager, T object) {
+        System.out.println("\nGoing to merge: " + object + "\n");
+        return entityManager.merge(object);
+    }
+
     <T> void persist(EntityManager entityManager, T object) {
         System.out.println("\nGoing to persist: " + object + "\n");
         entityManager.persist(object);

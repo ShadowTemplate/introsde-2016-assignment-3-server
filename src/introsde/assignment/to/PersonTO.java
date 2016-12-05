@@ -23,13 +23,6 @@ public class PersonTO implements Serializable {
 
     }
 
-    public PersonTO(String firstname, String lastname, List<MeasureTO> currentHealth, List<MeasureTO> healthHistory) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.currentHealth = currentHealth;
-        this.healthHistory = healthHistory;
-    }
-
     public Long getId() {
         return id;
     }

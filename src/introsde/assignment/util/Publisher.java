@@ -9,9 +9,6 @@ import java.net.UnknownHostException;
 public class Publisher {
 
     public static void main(String[] args) throws UnknownHostException, ClassNotFoundException {
-        /*
-        Endpoint.publish("http://localhost:8080/ws/people", new PeopleImpl());
-        System.out.println("Published");*/
         String PROTOCOL = "http://";
         String HOSTNAME = InetAddress.getLocalHost().getHostAddress();
         if (HOSTNAME.equals("127.0.0.1")) {

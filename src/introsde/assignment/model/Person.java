@@ -31,13 +31,6 @@ public class Person implements Serializable {
 
     }
 
-    public Person(String firstname, String lastname, List<Measure> currentHealth, List<Measure> healthHistory) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.currentHealth = currentHealth;
-        this.healthHistory = healthHistory;
-    }
-
     public Long getId() {
         return id;
     }

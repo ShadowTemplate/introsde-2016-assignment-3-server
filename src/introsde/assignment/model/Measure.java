@@ -36,13 +36,6 @@ public class Measure implements Serializable {
 
     }
 
-    public Measure(Date dateRegistered, String measureType, String measureValue, String measureValueType) {
-        this.dateRegistered = dateRegistered;
-        this.measureType = measureType;
-        this.measureValue = measureValue;
-        this.measureValueType = measureValueType;
-    }
-
     public Long getMid() {
         return mid;
     }
@@ -99,7 +92,8 @@ public class Measure implements Serializable {
                 ", measureType='" + measureType + '\'' +
                 ", measureValue='" + measureValue + '\'' +
                 ", measureValueType='" + measureValueType + '\'' +
-                ", personId='" + person.getId() + '\'' +
                 '}';
     }
+
+
 }
