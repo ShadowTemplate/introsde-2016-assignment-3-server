@@ -51,9 +51,7 @@
     </target>
 
     <target name="install" depends="clean, init">
-        <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="lib.path.id" includeAntRuntime="false"
-               source="1.8">
-        </javac>
+        <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="lib.path.id" includeAntRuntime="false"/>
         <copy todir="${build.dir}" overwrite="true">
             <fileset dir="${src.dir}">
                 <include name="*.xml"/>
