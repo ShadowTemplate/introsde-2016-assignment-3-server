@@ -42,7 +42,7 @@
         </fileset>
     </path>
 
-    <target name="init" depends="install-ivy, resolve">
+    <target name="init" depends="resolve">
         <mkdir dir="${build.dir}"/>
     </target>
 
