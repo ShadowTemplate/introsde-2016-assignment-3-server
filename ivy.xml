@@ -1,9 +1,8 @@
 <ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
     <info
-        organisation="introsde"
-        module="lab08"
-        status="integration">
+        organisation="introsde-2016"
+        module="assignment-3">
 	</info>
 	
 	<dependencies>
@@ -15,9 +14,6 @@
         <dependency org="javax.ejb" name="javax.ejb-api" rev="3.2"/>
         <dependency org="org.eclipse.persistence" name="javax.persistence" rev="2.1.0"/>
         <dependency org="org.eclipse.persistence" name="org.eclipse.persistence.jpa" rev="2.5.2"/>
-        <dependency org="net.sf.dozer" name="dozer" rev="5.5.1"/>
-        <dependency org="joda-time" name="joda-time" rev="2.4"/>
-        <dependency org="org.slf4j" name="slf4j-nop" rev="1.7.7"/>
         <dependency org="org.projectlombok" name="lombok" rev="1.16.10"/>
         <dependency org="org.eclipse.persistence" name="org.eclipse.persistence.jpa.modelgen.processor" rev="2.5.2"/>
     </dependencies>
