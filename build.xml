@@ -46,11 +46,11 @@
         <mkdir dir="${build.dir}"/>
     </target>
 
-    <target name="clean">
+    <target name="clean" depends="init">
         <delete dir="${build.dir}"/>
     </target>
 
-    <target name="install" depends="clean, init">
+    <target name="install" depends="clean">
         <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="lib.path.id" includeAntRuntime="false"
                source="1.8" target="1.8">
         </javac>
