@@ -16,6 +16,11 @@ Heroku buildpack: [https://github.com/IntroSDE/heroku-buildpack-ant.git](https:/
 ## Project structure
 
 The project repository is made up of the following *files* and **folders**:
+* **WebContent**: web application
+    * **META-INF**: metadata directory
+    * **WEB-INF**: server resources
+        * **lib**: server dependencies
+        * *web.xml*: Java EE deployment descriptor
 * **src**: application back end 
     * **introsde/assignment**: Java source code
         * **dao**: layer converting model objects from/to TOs
@@ -33,11 +38,6 @@ The project repository is made up of the following *files* and **folders**:
             *Measure.java*, *Person.java*: POJOs annotated to be wrapped into XML data
     * **META-INF**: metadata directory
         * *persistence.xml*: JPA configuration file            
-* **WebContent**: web application
-    * **META-INF**: metadata directory
-    * **WEB-INF**: server resources
-        * **lib**: server dependencies
-        * *web.xml*: Java EE deployment descriptor
 * *build.xml*: Ant configuration file containing task definitions (see next paragraph)
 * *ivy.xml*: Ivy configuration file containing server dependencies
 * *Procfile*: Heroku task configuration file
@@ -47,8 +47,6 @@ The project repository is made up of the following *files* and **folders**:
 
 The project is composed of two parts: a client and a server. They communicate by exchanging some Transfer Objects.
 These are POJOs representing the common interface the two side of the application share.
-
-The client application executes requests to the server and logs the result of these operations into a file.
 
 The server is made up of different packages. Each of them contains Java classes related to a specific layer of the architecture.
 Each layer is strongly decoupled from the other non-relevant ones: the soap layer only depends on the DAO one, 
