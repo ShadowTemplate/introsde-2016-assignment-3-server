@@ -1,14 +1,12 @@
 package introsde.assignment.soap;
 
 import introsde.assignment.dao.EntityDAO;
-import introsde.assignment.model.Measure;
 import introsde.assignment.to.MeasureTO;
 import introsde.assignment.to.PersonTO;
 
 import javax.jws.WebService;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @WebService(endpointInterface = "introsde.assignment.soap.People", serviceName="PeopleService")
 public class PeopleImpl implements People {
