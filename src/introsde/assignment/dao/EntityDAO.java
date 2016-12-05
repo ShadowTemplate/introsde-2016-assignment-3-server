@@ -57,9 +57,30 @@ public class EntityDAO {
         return ObjectConverter.toTO(person);
     }
 
+    public static List<MeasureTO> getPersonMeasureHistory(Long personId, String measureType) {
+        List<MeasureTO> healthHistory = EntityDAO.getPerson(personId).getHealthHistory();
+        List<MeasureTO> measures = new ArrayList<>();
+        for (MeasureTO measureTO : healthHistory) {
+            if (measureTO.getMeasureType().equals(measureType)) {
+                measures.add(measureTO);
+            }
+        }
+        return measures;
+    }
+
     public static List<String> listMeasure() {
         String query = "SELECT DISTINCT t.measureType FROM Measure t";
         return PersistenceManager.instance.listResultQuery(query);
+    }
+
+    public static MeasureTO getPersonMeasure(Long personId, String measureType, Long measureId) {
+        List<MeasureTO> currentHealth = EntityDAO.getPerson(personId).getCurrentHealth();
+        for (MeasureTO measureTO : currentHealth) {
+            if (measureTO.getMid().equals(measureId)) {
+                return measureTO;
+            }
+        }
+        return null;
     }
 
     public static MeasureTO addMeasure(Long personId, introsde.assignment.to.MeasureTO newMeasureTO) {

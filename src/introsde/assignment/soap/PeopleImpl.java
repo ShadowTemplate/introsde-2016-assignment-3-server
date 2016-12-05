@@ -5,7 +5,6 @@ import introsde.assignment.to.MeasureTO;
 import introsde.assignment.to.PersonTO;
 
 import javax.jws.WebService;
-import java.util.ArrayList;
 import java.util.List;
 
 @WebService(endpointInterface = "introsde.assignment.soap.People", serviceName="PeopleService")
@@ -46,14 +45,7 @@ public class PeopleImpl implements People {
     // #6
     @Override
     public List<MeasureTO> readPersonHistory(Long personId, String measureType) {
-        List<MeasureTO> healthHistory = EntityDAO.getPerson(personId).getHealthHistory();
-        List<MeasureTO> measures = new ArrayList<>();
-        for (MeasureTO measureTO : healthHistory) {
-            if (measureTO.getMeasureType().equals(measureType)) {
-                measures.add(measureTO);
-            }
-        }
-        return measures;
+        return EntityDAO.getPersonMeasureHistory(personId, measureType);
     }
 
     // #7
@@ -65,13 +57,7 @@ public class PeopleImpl implements People {
     // #8
     @Override
     public MeasureTO readPersonMeasure(Long personId, String measureType, Long measureId) {
-        List<MeasureTO> currentHealth = EntityDAO.getPerson(personId).getCurrentHealth();
-        for (MeasureTO measureTO : currentHealth) {
-            if (measureTO.getMid().equals(measureId)) {
-                return measureTO;
-            }
-        }
-        return null;
+        return EntityDAO.getPersonMeasure(personId, measureType, measureId);
     }
 
     // #9
