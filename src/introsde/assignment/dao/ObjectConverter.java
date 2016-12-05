@@ -1,11 +1,11 @@
 package introsde.assignment.dao;
 
+import introsde.assignment.model.Measure;
 import introsde.assignment.to.MeasureTO;
 import introsde.assignment.to.PersonTO;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ObjectConverter {
 
@@ -24,8 +24,16 @@ public class ObjectConverter {
         personTO.setId(person.getId());
         personTO.setFirstname(person.getFirstname());
         personTO.setLastname(person.getLastname());
-        personTO.setCurrentHealth(person.getCurrentHealth().stream().map(ObjectConverter::toTO).collect(Collectors.toList()));
-        personTO.setHealthHistory(person.getHealthHistory().stream().map(ObjectConverter::toTO).collect(Collectors.toList()));
+        List<MeasureTO> currentMeasures = new ArrayList<>();
+        for (Measure measure : person.getCurrentHealth()) {
+            currentMeasures.add(toTO(measure));
+        }
+        personTO.setCurrentHealth(currentMeasures);
+        List<MeasureTO> measuresHistory = new ArrayList<>();
+        for (Measure measure : person.getHealthHistory()) {
+            measuresHistory.add(toTO(measure));
+        }
+        personTO.setHealthHistory(measuresHistory);
         return personTO;
     }
 
@@ -48,18 +56,22 @@ public class ObjectConverter {
         person.setLastname(personTO.getLastname());
 
         List<MeasureTO> currentHealth = personTO.getCurrentHealth();
+        List<Measure> currentMeasures = new ArrayList<>();
         if(currentHealth != null) {
-            person.setCurrentHealth(currentHealth.stream().map(ObjectConverter::toModel).collect(Collectors.toList()));
-        } else {
-            person.setCurrentHealth(new ArrayList<>());
+            for (MeasureTO measureTO : currentHealth) {
+                currentMeasures.add(toModel(measureTO));
+            }
         }
+        person.setCurrentHealth(currentMeasures);
 
         List<MeasureTO> healthHistory = personTO.getHealthHistory();
+        List<Measure> measuresHistory = new ArrayList<>();
         if (healthHistory != null) {
-            person.setHealthHistory(healthHistory.stream().map(ObjectConverter::toModel).collect(Collectors.toList()));
-        } else {
-            person.setHealthHistory(new ArrayList<>());
+            for (MeasureTO measureTO : healthHistory) {
+                measuresHistory.add(toModel(measureTO));
+            }
         }
+        person.setHealthHistory(measuresHistory);
         return person;
     }
 }

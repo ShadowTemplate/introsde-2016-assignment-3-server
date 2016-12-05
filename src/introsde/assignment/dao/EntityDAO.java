@@ -6,18 +6,23 @@ import introsde.assignment.persistence.PersistenceManager;
 import introsde.assignment.to.MeasureTO;
 import introsde.assignment.to.PersonTO;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class EntityDAO {
 
     public static List<PersonTO> listPeople() {
         String query = "SELECT p FROM Person p";
         List<Person> people = PersistenceManager.instance.listResultQuery(query);
-        return people.stream().map(ObjectConverter::toTO).collect(Collectors.toList());
+        List<PersonTO> personTOsList = new ArrayList<>();
+        for (Person person : people) {
+            personTOsList.add(ObjectConverter.toTO(person));
+        }
+        return personTOsList;
     }
 
     public static PersonTO getPerson(Long personId) {
@@ -38,15 +43,18 @@ public class EntityDAO {
     }
 
     public static PersonTO updatePerson(Long personId, PersonTO oldpersonTO) {
-        return PersistenceManager.instance.runViaProxy(entityManagerProxy -> {
-            Person person = ObjectConverter.toModel(oldpersonTO);
-            person.setId(personId);
-            person = entityManagerProxy.merge(person);
-            person.setFirstname(oldpersonTO.getFirstname());
-            person.setLastname(oldpersonTO.getLastname());
-            entityManagerProxy.persist(person);
-            return ObjectConverter.toTO(person);
-        });
+        EntityManager entityManager = PersistenceManager.instance.getEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        System.out.println("\nRunning function\n");
+        Person person = ObjectConverter.toModel(oldpersonTO);
+        person.setId(personId);
+        person = entityManager.merge(person);
+        person.setFirstname(oldpersonTO.getFirstname());
+        person.setLastname(oldpersonTO.getLastname());
+        entityManager.persist(person);
+        transaction.commit();
+        return ObjectConverter.toTO(person);
     }
 
     public static List<String> listMeasure() {
@@ -55,44 +63,65 @@ public class EntityDAO {
     }
 
     public static MeasureTO addMeasure(Long personId, introsde.assignment.to.MeasureTO newMeasureTO) {
-        return PersistenceManager.instance.runViaProxy(entityManagerProxy -> {
-            String query = "SELECT p FROM Person p WHERE p.id=:arg1";
-            Map<String, Object> params = new HashMap<>();
-            params.put("arg1", personId);
-            Person person = (Person) PersistenceManager.instance.singleResultQuery(query, params);
-            Predicate<? super Measure> sameMeasure = (Predicate<Measure>) m ->
-                            m.getMeasureType().equals(newMeasureTO.getMeasureType());
+        EntityManager entityManager = PersistenceManager.instance.getEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        System.out.println("\nRunning function\n");
 
-            List<Measure> currentMeasures = person.getCurrentHealth();
-            Measure oldMeasure = currentMeasures.stream().filter(sameMeasure).findFirst().orElse(null);
-            if (oldMeasure != null) {
-                currentMeasures.remove(oldMeasure);
-                person.getHealthHistory().add(oldMeasure);
+        String query = "SELECT p FROM Person p WHERE p.id=:arg1";
+        Map<String, Object> params = new HashMap<>();
+        params.put("arg1", personId);
+        Person person = (Person) PersistenceManager.instance.singleResultQuery(query, params);
+        List<Measure> currentMeasures = person.getCurrentHealth();
+        Measure oldMeasure = null;
+        for (Measure m : currentMeasures) {
+            if (m.getMeasureType().equals(newMeasureTO.getMeasureType())) {
+                oldMeasure = m;
             }
+        }
+        if (oldMeasure != null) {
+            currentMeasures.remove(oldMeasure);
+            person.getHealthHistory().add(oldMeasure);
+        }
 
-            currentMeasures.add(ObjectConverter.toModel(newMeasureTO));
-            person = entityManagerProxy.merge(person);
-            return ObjectConverter.toTO(person.getCurrentHealth().stream().filter(sameMeasure).findFirst().orElse(null));
-        });
+        currentMeasures.add(ObjectConverter.toModel(newMeasureTO));
+        person = entityManager.merge(person);
+        transaction.commit();
+
+        oldMeasure = null;
+        for (Measure m : person.getCurrentHealth()) {
+            if (m.getMeasureType().equals(newMeasureTO.getMeasureType())) {
+                oldMeasure = m;
+            }
+        }
+        return oldMeasure == null ? null : ObjectConverter.toTO(oldMeasure);
     }
 
     public static MeasureTO updateMeasure(Long personId, MeasureTO measureTO) {
-        return PersistenceManager.instance.runViaProxy(entityManagerProxy -> {
-            String query = "SELECT p FROM Person p WHERE p.id=:arg1";
-            Map<String, Object> params = new HashMap<>();
-            params.put("arg1", personId);
-            Person person = (Person) entityManagerProxy.singleResultQuery(query, params);
-            Measure measure = person.getCurrentHealth().stream().filter(m -> m.getMid().equals(measureTO.getMid())).findFirst().orElseGet(null);
-            if (measure != null) {
-                measure.setMeasureType(measureTO.getMeasureType());
-                measure.setMeasureValue(measureTO.getMeasureValue());
-                measure.setMeasureValueType(measureTO.getMeasureValueType());
-                measure.setDateRegistered(measureTO.getDateRegistered());
+        EntityManager entityManager = PersistenceManager.instance.getEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        System.out.println("\nRunning function\n");
+        String query = "SELECT p FROM Person p WHERE p.id=:arg1";
+        Map<String, Object> params = new HashMap<>();
+        params.put("arg1", personId);
+        Person person = (Person) PersistenceManager.instance.singleResultQuery(entityManager, query, params);
+        Measure measure = null;
+        for (Measure m : person.getCurrentHealth()) {
+            if (m.getMid().equals(measureTO.getMid())) {
+                measure = m;
             }
-            person = entityManagerProxy.merge(person);
-            entityManagerProxy.persist(person);
-            return measure == null ? null : ObjectConverter.toTO(measure);
-        });
+        }
+        if (measure != null) {
+            measure.setMeasureType(measureTO.getMeasureType());
+            measure.setMeasureValue(measureTO.getMeasureValue());
+            measure.setMeasureValueType(measureTO.getMeasureValueType());
+            measure.setDateRegistered(measureTO.getDateRegistered());
+        }
+        person = entityManager.merge(person);
+        entityManager.persist(person);
+        transaction.commit();
+        return measure == null ? null : ObjectConverter.toTO(measure);
     }
 
     public static void initDatabase() {

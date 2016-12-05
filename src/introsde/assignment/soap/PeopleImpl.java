@@ -1,10 +1,12 @@
 package introsde.assignment.soap;
 
 import introsde.assignment.dao.EntityDAO;
+import introsde.assignment.model.Measure;
 import introsde.assignment.to.MeasureTO;
 import introsde.assignment.to.PersonTO;
 
 import javax.jws.WebService;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,7 +49,13 @@ public class PeopleImpl implements People {
     @Override
     public List<MeasureTO> readPersonHistory(Long personId, String measureType) {
         List<MeasureTO> healthHistory = EntityDAO.getPerson(personId).getHealthHistory();
-        return healthHistory.parallelStream().filter(m -> m.getMeasureType().equals(measureType)).collect(Collectors.toList());
+        List<MeasureTO> measures = new ArrayList<>();
+        for (MeasureTO measureTO : healthHistory) {
+            if (measureTO.getMeasureType().equals(measureType)) {
+                measures.add(measureTO);
+            }
+        }
+        return measures;
     }
 
     // #7
@@ -60,7 +68,12 @@ public class PeopleImpl implements People {
     @Override
     public MeasureTO readPersonMeasure(Long personId, String measureType, Long measureId) {
         List<MeasureTO> currentHealth = EntityDAO.getPerson(personId).getCurrentHealth();
-        return currentHealth.parallelStream().filter(m -> m.getMid().equals(measureId)).findFirst().orElseGet(null);
+        for (MeasureTO measureTO : currentHealth) {
+            if (measureTO.getMid().equals(measureId)) {
+                return measureTO;
+            }
+        }
+        return null;
     }
 
     // #9
