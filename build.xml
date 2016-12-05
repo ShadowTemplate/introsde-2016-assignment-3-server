@@ -50,7 +50,7 @@
         <delete dir="${build.dir}"/>
     </target>
 
-    <target name="install" depends="clean">
+    <target name="install">
         <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="lib.path.id" includeAntRuntime="false"
                source="1.8" target="1.8">
         </javac>
