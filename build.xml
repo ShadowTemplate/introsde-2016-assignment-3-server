@@ -4,11 +4,6 @@
     <property name="ivy.jar.dir" value="${basedir}/ivy"/>
     <property name="ivy.jar.file" value="${ivy.jar.dir}/ivy.jar"/>
 
-    <!--
-    <property name="ant.build.javac.source" value="1.7"/>
-    <property name="ant.build.javac.target" value="1.7"/>
-     -->
-
     <target name="download-ivy" unless="skip.download">
         <mkdir dir="${ivy.jar.dir}"/>
         <get src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar"
