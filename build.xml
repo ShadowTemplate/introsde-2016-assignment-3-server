@@ -42,17 +42,17 @@
         </fileset>
     </path>
 
-    <target name="init" depends="resolve">
+    <target name="init" depends="install-ivy, resolve">
         <mkdir dir="${build.dir}"/>
     </target>
 
-    <target name="clean" depends="init">
+    <target name="clean">
         <delete dir="${build.dir}"/>
     </target>
 
-    <target name="install">
+    <target name="install" depends="clean, init">
         <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="lib.path.id" includeAntRuntime="false"
-               source="1.8" target="1.8">
+               source="1.8">
         </javac>
         <copy todir="${build.dir}" overwrite="true">
             <fileset dir="${src.dir}">
